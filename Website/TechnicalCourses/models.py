@@ -11,4 +11,4 @@ class details(models.Model):
     sp = models.CharField(max_length=500)
     il = models.CharField(max_length=500)
     def __str__(self):
-        return self.sp
+        return str(self.pk)
