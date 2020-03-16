@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse 
 from .models import Allcourses
 from django.template import loader
 
@@ -13,8 +13,19 @@ def Courses(request):
     return HttpResponse(template.render(context, request))
 
 def detail(request, course_id):
+    course = get_object_or_404(Allcourses, pk = course_id)
+    return render(request, 'TechnicalCourses/detail.html',  {'course': course})
+
+def your_choice(request, course_id):
+    course = get_object_or_404(Allcourses, pk = course_id)
     try:
-        course = Allcourses.objects.get(pk=course_id)
-    except Allcourses.DoesNotExist:
-        raise Http404("Course Not Available")
-    return render(request, 'TechnicalCourses/detail.html', {'course': course})
+        selected_ct = course.details_set.get(pk = request.POST['choice'])
+    except (KeyError, Allcourses.DoesNotExist):
+        return render(request, 'TechnicalCourses/detail.html', {
+            'course': course,
+            'error_message': "Select valid option"
+        })
+    else:
+        selected_ct.your_choice = True
+        selected_ct.save()
+        return render(request, 'TechnicalCourses/detail.html', {'course': course})
