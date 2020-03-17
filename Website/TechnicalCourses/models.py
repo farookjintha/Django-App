@@ -10,7 +10,8 @@ class Allcourses(models.Model):
         return self.coursename
     
     def was_published_recently(self):
-        return self.startedfrom >= timezone.now() - datetime.timedelta(days=1)
+        now = timezone.now()
+        return now-datetime.timedelta(days=1) <= self.startedfrom <= now
 
 class details(models.Model):
     course = models.ForeignKey(Allcourses, on_delete = models.CASCADE)
