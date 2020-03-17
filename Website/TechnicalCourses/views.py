@@ -16,7 +16,7 @@ def detail(request, course_id):
     course = get_object_or_404(Allcourses, pk = course_id)
     return render(request, 'TechnicalCourses/detail.html',  {'course': course})
 
-def your_choice(request, course_id):
+def yourchoice(request, course_id):
     course = get_object_or_404(Allcourses, pk = course_id)
     try:
         selected_ct = course.details_set.get(pk = request.POST['choice'])
